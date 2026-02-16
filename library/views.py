@@ -18,7 +18,14 @@ class MemberModelViewSet(ModelViewSet):
 
 class AuthorModelViewSet(ModelViewSet):
     serializer_class=serializers.AuthorSerializer
-    queryset=models.Author.objects.all()
+    
+    
+    def get_queryset(self):
+        book_id=self.kwargs.get('book_pk')
+        queryset=models.Author.objects.select_related('books').all()
+        if book_id:
+            queryset=queryset.filter(books=book_id)
+        return queryset
 
 
 class BorrowRecordModelViewSet(ModelViewSet):
