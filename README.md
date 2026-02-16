@@ -29,30 +29,14 @@ A professional, industry-standard RESTful API built with **Django** and **Django
 
 | Entity | Method | Endpoint | Description |
 | :--- | :--- | :--- | :--- |
-
 | **Books** | `GET` | `/books/` | List all books |
-|  | `POST` | `/books/` | Create a new book |
-|  | `GET` | `/books/{id}/` | Retrieve single book |
-|  | `PATCH` | `/books/{id}/` | Update book |
-|  | `DELETE` | `/books/{id}/` | Delete book |
-
+| | `POST` | `/books/` | Create a new book |
 | **Members** | `GET` | `/members/` | List all members |
-|  | `POST` | `/members/` | Register a new member |
-|  | `GET` | `/members/{id}/` | Retrieve single member |
-|  | `PATCH` | `/members/{id}/` | Update member |
-|  | `DELETE` | `/members/{id}/` | Delete member |
-
+| | `POST` | `/members/` | Register a new member |
 | **Authors** | `GET` | `/authors/` | List all authors |
-|  | `POST` | `/authors/` | Add a new author |
-|  | `GET` | `/authors/{id}/` | Retrieve single author |
-|  | `PATCH` | `/authors/{id}/` | Update author |
-|  | `DELETE` | `/authors/{id}/` | Delete author |
-
-| **Borrow Records** | `GET` | `/borrow-records/` | List all borrow records |
-|  | `POST` | `/borrow-records/` | Borrow a book |
-|  | `GET` | `/borrow-records/{id}/` | Retrieve borrow record |
-|  | `PATCH` | `/borrow-records/{id}/` | Return a book |
-|  | `DELETE` | `/borrow-records/{id}/` | Delete borrow record |
+| | `POST` | `/authors/` | Add a new author |
+| **Borrowing**| `POST` | `/borrow-records/` | Borrow a book (Business Logic included) |
+| | `PATCH` | `/borrow-records/{id}/`| Return a book |
 
 ---
 
