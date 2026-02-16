@@ -26,3 +26,8 @@ class BorrowRecordSerializer(serializers.ModelSerializer):
         model=models.BorrowRecord
         fields=['id','book','member','borrow_date','return_date']
         
+class UpdateBorrowRecordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=models.BorrowRecord
+        fields=['return_date']
+        
