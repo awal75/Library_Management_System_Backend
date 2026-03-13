@@ -5,36 +5,47 @@ from library import models
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
-from django.db import transaction
-from django.utils import timezone
-# Create your views here.
+from rest_framework.permissions import IsAuthenticated,IsAdminUser,AllowAny,DjangoModelPermissionsOrAnonReadOnly
+from library.service import BookService
+from library.permissions import IsLibrarian
 
 
 class BookModelViewSet(ModelViewSet):
-    serializer_class=serializers.BookSerializer
     queryset=models.Book.objects.all()
+    permission_classes=[DjangoModelPermissionsOrAnonReadOnly]
 
 
-
-class MemberModelViewSet(ModelViewSet):
-    serializer_class=serializers.MemberSerializer
-    queryset=models.Member.objects.all()
-
-
-class AuthorModelViewSet(ModelViewSet):
-    serializer_class=serializers.AuthorSerializer
-    queryset=models.Author.objects.all()
+    @action(detail=True,methods=['post'],permission_classes = [IsAuthenticated])
+    def borrow(self,request,pk=None):
+        borrow= BookService.borrow_book(book_id=pk,member=request.user.member,return_date=request.data.get('return_date'))
+        serializer = self.get_serializer(borrow)
+        return Response(serializer.data,status=status.HTTP_201_CREATED)
     
-   
+    @action(detail=True,methods=['post'],url_path='return',permission_classes=[IsLibrarian])
+    def return_book(self,request,pk=None):
+        print(request.data)
+        return_bk=BookService.return_book(book_id=pk,email=request.data.get('email'))
+        serializer=serializers.ReturnBookSerializer(return_bk)
+        return Response(serializer.data,status=status.HTTP_200_OK)
 
 
-class BorrowRecordModelViewSet(ModelViewSet):
-    http_method_names=['get','post','patch','delete']
-    queryset=models.BorrowRecord.objects.all()
-
+    # def get_permissions(self):
+    #     if self.action in ['create','update','destroy','return_book']:
+    #         return [IsAuthenticated(),IsAdminUser()]
+    #     elif self.action == 'borrow':
+    #         return [IsAuthenticated()]
+        
+    #     else:
+    #         return [AllowAny()]
+        
     def get_serializer_class(self):
-        if self.request.method=='PATCH':
-            return serializers.UpdateBorrowRecordSerializer
-        return serializers.BorrowRecordSerializer
+        if self.action=='borrow':
+            return serializers.BorrowRecordSerializer
+        if self.action == 'return_book':
+            return serializers.ReturnSerializer
+        return serializers.BookSerializer
+        
+
+
 
     
